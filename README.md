@@ -38,7 +38,7 @@ codex-session-delete/
 
 在 Codex 的会话列表里右键目标对话，然后点击“复制会话 ID”。
 
-![复制会话 ID](assets/copy-session-id.jpg)
+<img src="assets/copy-session-id.jpg" alt="复制会话 ID" width="50%">
 
 ### 推荐使用方式
 
@@ -129,7 +129,7 @@ codex-session-delete/
 
 In the Codex conversation list, right-click the target conversation and choose "Copy Session ID".
 
-![Copy Session ID](assets/copy-session-id.jpg)
+<img src="assets/copy-session-id.jpg" alt="Copy Session ID" width="50%">
 
 ### Recommended Usage
 
