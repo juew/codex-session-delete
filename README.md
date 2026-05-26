@@ -4,6 +4,9 @@
 
 Find and permanently delete a local Codex conversation by exact session ID.
 
+<img width="1080" height="1920" alt="2ed7fa596bccb4909fe8a72a2306979f" src="https://github.com/user-attachments/assets/757e8c90-2e19-45cf-8dd2-c48d631ba9a0" />
+
+
 ## 中文说明
 
 Codex 会把本地对话文件保存在类似下面的目录中：
