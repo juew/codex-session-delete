@@ -19,7 +19,14 @@ Codex 会把本地对话文件保存在类似下面的目录中：
 
 ### 安装
 
-把这个插件复制到你的 Codex 插件目录，或通过 Codex 从本地 Git 仓库安装。
+推荐直接克隆到本地 Codex 插件目录：
+
+```bash
+mkdir -p ~/plugins
+git clone https://github.com/juew/codex-session-delete.git ~/plugins/codex-session-delete
+```
+
+然后重启 Codex，并在插件页面确认 `codex-session-delete` 已安装并启用。
 
 插件目录结构：
 
@@ -29,6 +36,12 @@ codex-session-delete/
   skills/delete-session/SKILL.md
   scripts/delete_codex_session.py
 ```
+
+### 会话 ID 从哪里来
+
+在 Codex 的会话列表里右键目标对话，然后点击“复制会话 ID”。
+
+![复制会话 ID](assets/copy-session-id.jpg)
 
 ### 推荐使用方式
 
@@ -97,7 +110,14 @@ This plugin provides a Codex skill and a local script. Give it a session ID, and
 
 ### Install
 
-Copy this plugin into your Codex plugins directory, or install it from a local Git checkout through Codex.
+Clone this repository into your local Codex plugins directory:
+
+```bash
+mkdir -p ~/plugins
+git clone https://github.com/juew/codex-session-delete.git ~/plugins/codex-session-delete
+```
+
+Then restart Codex and confirm that `codex-session-delete` is installed and enabled in the plugin page.
 
 Expected plugin layout:
 
@@ -107,6 +127,12 @@ codex-session-delete/
   skills/delete-session/SKILL.md
   scripts/delete_codex_session.py
 ```
+
+### Where To Find The Session ID
+
+In the Codex conversation list, right-click the target conversation and choose "Copy Session ID".
+
+![Copy Session ID](assets/copy-session-id.jpg)
 
 ### Recommended Usage
 
