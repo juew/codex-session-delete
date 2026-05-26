@@ -16,7 +16,15 @@ Codex 会把本地对话文件保存在类似下面的目录中：
 
 ### 安装
 
-推荐直接克隆到本地 Codex 插件目录：
+推荐直接告诉 Codex：
+
+```text
+安装这个插件 https://github.com/juew/codex-session-delete.git ~/plugins/codex-session-delete
+```
+
+Codex 会从 GitHub 拉取插件并安装到本地插件目录。
+
+也可以手动克隆到本地 Codex 插件目录：
 
 ```bash
 mkdir -p ~/plugins
@@ -107,7 +115,15 @@ This plugin provides a Codex skill and a local script. Give it a session ID, and
 
 ### Install
 
-Clone this repository into your local Codex plugins directory:
+Recommended: ask Codex directly:
+
+```text
+Install this plugin https://github.com/juew/codex-session-delete.git ~/plugins/codex-session-delete
+```
+
+Codex will fetch the plugin from GitHub and install it into your local plugins directory.
+
+You can also clone it manually:
 
 ```bash
 mkdir -p ~/plugins
