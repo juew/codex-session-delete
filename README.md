@@ -10,6 +10,7 @@ Codex 会把本地对话文件保存在类似下面的目录中：
 
 ```text
 ~/.codex/sessions/YYYY/MM/DD/<session-id>.jsonl
+~/.codex/sessions/YYYY/MM/DD/rollout-YYYY-MM-DDTHH-MM-SS-<session-id>.jsonl
 ```
 
 这个插件提供了一个 Codex 技能和一个本地脚本。你只需要提供会话 ID，它会在 sessions 目录中查找精确匹配的 JSONL 文件，并将其删除。
@@ -108,7 +109,7 @@ python3 scripts/delete_codex_session.py <session-id> --scan-from ~/Downloads/wor
 
 - 只会删除解析后的 sessions 根目录里的文件。
 - 使用 `--scan-from` 时，只会删除扫描到的 `.codex/sessions` 目录里的文件。
-- 必须精确匹配完整会话 ID。
+- 必须精确匹配完整会话 ID，支持 `<session-id>.jsonl` 和 `rollout-...-<session-id>.jsonl`。
 - 拒绝包含路径符号的 ID。
 - 如果发现多个精确匹配，会停止并报错。
 - 不会删除目录。
@@ -122,6 +123,7 @@ Codex stores local conversation files in a directory like this:
 
 ```text
 ~/.codex/sessions/YYYY/MM/DD/<session-id>.jsonl
+~/.codex/sessions/YYYY/MM/DD/rollout-YYYY-MM-DDTHH-MM-SS-<session-id>.jsonl
 ```
 
 This plugin provides a Codex skill and a local script. Give it a session ID, and it searches the sessions directory for the exact matching JSONL file, then deletes it.
@@ -220,7 +222,7 @@ python3 scripts/delete_codex_session.py <session-id> --scan-from ~/Downloads/wor
 
 - Deletes only files under the resolved sessions root.
 - With `--scan-from`, deletes only files under discovered `.codex/sessions` directories.
-- Requires an exact full session ID match.
+- Requires an exact full session ID match, supporting both `<session-id>.jsonl` and `rollout-...-<session-id>.jsonl`.
 - Rejects path-like IDs.
 - Stops with an error if more than one exact match is found.
 - Does not delete directories.

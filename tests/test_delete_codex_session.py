@@ -20,6 +20,26 @@ def run_script(*args: str) -> subprocess.CompletedProcess[str]:
 
 
 class DeleteCodexSessionTests(unittest.TestCase):
+    def test_root_finds_rollout_prefixed_session_file_for_dry_run(self) -> None:
+        with tempfile.TemporaryDirectory() as raw_tmp:
+            tmp_path = Path(raw_tmp)
+            session_id = "019e5e37-c141-7932-95b9-92a4f09f01d8"
+            session_file = (
+                tmp_path
+                / "2026"
+                / "05"
+                / "25"
+                / f"rollout-2026-05-25T16-19-32-{session_id}.jsonl"
+            )
+            session_file.parent.mkdir(parents=True)
+            session_file.write_text("{}", encoding="utf-8")
+
+            result = run_script(session_id, "--root", str(tmp_path), "--dry-run")
+
+            self.assertEqual(result.returncode, 0)
+            self.assertIn(f"would delete: {session_file.resolve()}", result.stdout)
+            self.assertTrue(session_file.exists())
+
     def test_scan_from_finds_nested_codex_sessions_for_dry_run(self) -> None:
         with tempfile.TemporaryDirectory() as raw_tmp:
             tmp_path = Path(raw_tmp)

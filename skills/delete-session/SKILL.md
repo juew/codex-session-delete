@@ -30,7 +30,7 @@ python3 scripts/delete_codex_session.py <session-id> --scan-from <directory>
 
 - By default, only delete files found under `$CODEX_HOME/sessions` or `~/.codex/sessions`.
 - With `--scan-from`, only delete files found under discovered `.codex/sessions` directories.
-- Require an exact session ID match against the JSONL filename stem.
+- Require an exact session ID match against either `<session-id>.jsonl` or a filename ending in `-<session-id>.jsonl`.
 - If multiple exact matches are found, stop and report the conflict instead of deleting.
 - Do not delete directories.
 - Do not use wildcards, partial IDs, or fuzzy matching for deletion.

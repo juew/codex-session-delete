@@ -92,8 +92,13 @@ def find_sessions_roots(scan_root: Path) -> list[Path]:
 
 
 def find_matches(root: Path, session_id: str) -> list[Path]:
-    target_name = f"{session_id}.jsonl"
-    return sorted(path for path in root.rglob(target_name) if path.is_file())
+    exact_name = f"{session_id}.jsonl"
+    suffix = f"-{session_id}.jsonl"
+    return sorted(
+        path
+        for path in root.rglob("*.jsonl")
+        if path.is_file() and (path.name == exact_name or path.name.endswith(suffix))
+    )
 
 
 def find_matches_in_roots(roots: list[Path], session_id: str) -> list[Path]:
