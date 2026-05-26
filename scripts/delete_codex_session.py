@@ -31,6 +31,11 @@ def parse_args() -> argparse.Namespace:
         help="Codex sessions root. Defaults to $CODEX_HOME/sessions or ~/.codex/sessions.",
     )
     parser.add_argument(
+        "--scan-from",
+        default=None,
+        help="Directory to scan for nested .codex/sessions roots.",
+    )
+    parser.add_argument(
         "--dry-run",
         action="store_true",
         help="Show the matching file without deleting it.",
@@ -67,15 +72,51 @@ def resolve_root(raw_root: str) -> Path:
     return root
 
 
+def resolve_scan_root(raw_scan_root: str) -> Path:
+    scan_root = Path(raw_scan_root).expanduser().resolve()
+    if not scan_root.exists():
+        raise FileNotFoundError(f"scan root does not exist: {scan_root}")
+    if not scan_root.is_dir():
+        raise NotADirectoryError(f"scan root is not a directory: {scan_root}")
+    return scan_root
+
+
+def find_sessions_roots(scan_root: Path) -> list[Path]:
+    roots: set[Path] = set()
+    if scan_root.name == "sessions" and scan_root.parent.name == ".codex":
+        roots.add(scan_root)
+    for path in scan_root.rglob("sessions"):
+        if path.is_dir() and path.parent.name == ".codex":
+            roots.add(path.resolve())
+    return sorted(roots)
+
+
 def find_matches(root: Path, session_id: str) -> list[Path]:
     target_name = f"{session_id}.jsonl"
     return sorted(path for path in root.rglob(target_name) if path.is_file())
+
+
+def find_matches_in_roots(roots: list[Path], session_id: str) -> list[Path]:
+    matches: list[Path] = []
+    for root in roots:
+        matches.extend(find_matches(root, session_id))
+    return sorted(matches)
 
 
 def ensure_inside_root(root: Path, path: Path) -> None:
     resolved = path.resolve()
     if root not in (resolved, *resolved.parents):
         raise ValueError(f"refusing to delete outside sessions root: {resolved}")
+
+
+def ensure_inside_any_root(roots: list[Path], path: Path) -> None:
+    for root in roots:
+        try:
+            ensure_inside_root(root, path)
+        except ValueError:
+            continue
+        return
+    raise ValueError(f"refusing to delete outside discovered sessions roots: {path.resolve()}")
 
 
 def main() -> int:
@@ -90,15 +131,30 @@ def main() -> int:
 
     try:
         session_id = validate_session_id(args.session_id)
-        root = resolve_root(args.root or str(default_sessions_root()))
-        matches = find_matches(root, session_id)
+        if args.scan_from is not None:
+            scan_root = resolve_scan_root(args.scan_from)
+            roots = find_sessions_roots(scan_root)
+            matches = find_matches_in_roots(roots, session_id)
+        else:
+            root = resolve_root(args.root or str(default_sessions_root()))
+            roots = [root]
+            matches = find_matches(root, session_id)
     except (OSError, ValueError) as error:
         print(f"error: {error}", file=sys.stderr)
         return 1
 
     if not matches:
         print(f"not found: {session_id}")
-        print(f"searched: {root}")
+        if args.scan_from is not None:
+            print(f"scanned from: {scan_root}")
+            if roots:
+                print("searched sessions roots:")
+                for root in roots:
+                    print(root)
+            else:
+                print("searched sessions roots: none found")
+        else:
+            print(f"searched: {roots[0]}")
         return 1
 
     if len(matches) > 1:
@@ -109,7 +165,7 @@ def main() -> int:
 
     match = matches[0]
     try:
-        ensure_inside_root(root, match)
+        ensure_inside_any_root(roots, match)
     except ValueError as error:
         print(f"error: {error}", file=sys.stderr)
         return 1

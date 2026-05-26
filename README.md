@@ -66,6 +66,12 @@ codex-session-delete/
 
 如果安装后没有立刻生效，重启 Codex，或确认插件页中 `codex-session-delete` 已安装并启用。
 
+如果默认位置没有找到会话，Codex 会提示你是否扩大搜索范围。你可以指定一个工作区目录，例如：
+
+```text
+在 ~/Downloads/workspace 中继续查找这个会话
+```
+
 ### 命令行用法
 
 命令行适合调试、批处理，或在 Codex 插件调用不可用时使用。在插件目录下运行：
@@ -92,9 +98,16 @@ CODEX_HOME=/path/to/.codex python3 scripts/delete_codex_session.py <session-id>
 python3 scripts/delete_codex_session.py <session-id> --root /path/to/.codex/sessions
 ```
 
+如果你不知道具体 sessions 根目录，但知道项目大概在哪个工作区，可以扫描该目录下所有 `.codex/sessions`：
+
+```bash
+python3 scripts/delete_codex_session.py <session-id> --scan-from ~/Downloads/workspace
+```
+
 ### 安全策略
 
 - 只会删除解析后的 sessions 根目录里的文件。
+- 使用 `--scan-from` 时，只会删除扫描到的 `.codex/sessions` 目录里的文件。
 - 必须精确匹配完整会话 ID。
 - 拒绝包含路径符号的 ID。
 - 如果发现多个精确匹配，会停止并报错。
@@ -165,6 +178,12 @@ The plugin will call the bundled script, find the exact matching JSONL file by f
 
 If it does not work immediately after installation, restart Codex or confirm that `codex-session-delete` is installed and enabled in the plugin page.
 
+If the default location does not contain the session, Codex can ask whether to expand the search. You can provide a workspace directory, for example:
+
+```text
+Continue searching for this session in ~/Downloads/workspace
+```
+
 ### Command Line Usage
 
 The command line is useful for debugging, batch cleanup, or as a fallback when plugin invocation is unavailable. From the plugin directory:
@@ -191,9 +210,16 @@ Or pass the sessions root directly:
 python3 scripts/delete_codex_session.py <session-id> --root /path/to/.codex/sessions
 ```
 
+If you do not know the exact sessions root but know the workspace area, scan all `.codex/sessions` directories under it:
+
+```bash
+python3 scripts/delete_codex_session.py <session-id> --scan-from ~/Downloads/workspace
+```
+
 ### Safety
 
 - Deletes only files under the resolved sessions root.
+- With `--scan-from`, deletes only files under discovered `.codex/sessions` directories.
 - Requires an exact full session ID match.
 - Rejects path-like IDs.
 - Stops with an error if more than one exact match is found.

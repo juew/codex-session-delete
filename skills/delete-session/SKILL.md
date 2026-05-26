@@ -16,12 +16,20 @@ Use this skill when the user wants to permanently remove a local Codex conversat
 python3 scripts/delete_codex_session.py <session-id>
 ```
 
-3. Report the deleted file path from the script output.
-4. Tell the user to restart Codex if the conversation still appears in the UI.
+3. If the script reports `not found`, ask whether to scan a broader workspace directory.
+4. When the user provides or approves a broader directory, run:
+
+```bash
+python3 scripts/delete_codex_session.py <session-id> --scan-from <directory>
+```
+
+5. Report the deleted file path from the script output.
+6. Tell the user to restart Codex if the conversation still appears in the UI.
 
 ## Safety Rules
 
-- Only delete files found under `~/.codex/sessions`.
+- By default, only delete files found under `$CODEX_HOME/sessions` or `~/.codex/sessions`.
+- With `--scan-from`, only delete files found under discovered `.codex/sessions` directories.
 - Require an exact session ID match against the JSONL filename stem.
 - If multiple exact matches are found, stop and report the conflict instead of deleting.
 - Do not delete directories.
@@ -39,4 +47,10 @@ List the resolved sessions root:
 
 ```bash
 python3 scripts/delete_codex_session.py --sessions-root
+```
+
+Scan a broader directory for project-local `.codex/sessions` roots:
+
+```bash
+python3 scripts/delete_codex_session.py <session-id> --scan-from ~/Downloads/workspace
 ```
